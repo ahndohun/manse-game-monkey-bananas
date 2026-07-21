@@ -17,7 +17,7 @@
   "creator": "Manse",
   "energy": "active",
   "gameUrl": "https://monkey-bananas.example.invalid/",
-  "sourceUrl": "https://github.com/replace-me/monkey-bananas",
+  "sourceUrl": "https://github.com/ahndohun/manse-game-monkey-bananas",
   "engineVersion": "0.2.0",
   "locales": [
     "ko"
