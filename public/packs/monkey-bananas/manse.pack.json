@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 2,
+  "meta": {
+    "id": "manse.monkey-bananas",
+    "title": [
+      {
+        "locale": "ko",
+        "text": "원숭이 바나나 (Monkey Bananas)"
+      }
+    ],
+    "summary": [
+      {
+        "locale": "ko",
+        "text": "Jump up high to pick the bananas hanging in the tree."
+      }
+    ],
+    "theme": "A jungle tree where a hungry little monkey jumps to pick bananas hanging high above",
+    "locales": [
+      "ko"
+    ],
+    "ageBands": [
+      "4-5",
+      "6-7",
+      "8+"
+    ],
+    "estMinutes": 2,
+    "engine": {
+      "minimumVersion": "0.2.0",
+      "maximumVersion": "0.2.0"
+    },
+    "compiler": {
+      "model": "GPT-5.6 via Codex",
+      "reasoningEffort": "creator-session",
+      "generatedAt": "2026-07-21T14:34:13.253Z"
+    }
+  },
+  "permissions": {
+    "camera": true,
+    "deviceLocalStorage": true
+  },
+  "cast": [
+    {
+      "id": "guide",
+      "name": [
+        {
+          "locale": "ko",
+          "text": "Guide"
+        }
+      ],
+      "artAssetId": null,
+      "description": "A neutral runtime guide rendered without a character asset."
+    }
+  ],
+  "entrySceneId": "welcome",
+  "scenes": [
+    {
+      "id": "welcome",
+      "kind": "story",
+      "narration": {
+        "items": [
+          {
+            "locale": "ko",
+            "text": "Yum! Bananas are hanging high in the tree. Are you hungry?",
+            "audioAssetId": null
+          }
+        ],
+        "captionDefaultOn": true
+      },
+      "demo": null,
+      "challenge": null,
+      "learning": null,
+      "artAssetId": null,
+      "energy": "calm",
+      "terminal": false,
+      "transitions": [
+        {
+          "on": "always",
+          "to": "round-one",
+          "adapt": null
+        }
+      ]
+    },
+    {
+      "id": "round-one",
+      "kind": "challenge",
+      "narration": {
+        "items": [
+          {
+            "locale": "ko",
+            "text": "Jump up high to pick each banana. Reach for the sky!",
+            "audioAssetId": null
+          }
+        ],
+        "captionDefaultOn": true
+      },
+      "demo": null,
+      "challenge": {
+        "type": "jump",
+        "repetitions": 5,
+        "minRiseRatio": 0.12,
+        "landingStableMs": 300,
+        "cooldownMs": 800,
+        "timeBudgetMs": 112000,
+        "successAudioId": "success-tone",
+        "encourageAudioId": "encourage-tone"
+      },
+      "learning": {
+        "kind": "none",
+        "payload": []
+      },
+      "artAssetId": null,
+      "energy": "medium",
+      "terminal": false,
+      "transitions": [
+        {
+          "on": "success",
+          "to": "complete",
+          "adapt": null
+        },
+        {
+          "on": "struggle",
+          "to": "round-two",
+          "adapt": {
+            "targetScaleMul": 1,
+            "dwellMsMul": 1,
+            "countDelta": 0,
+            "timeBudgetMul": 1.2,
+            "repetitionsDelta": -1,
+            "toleranceMul": 1.2
+          }
+        }
+      ]
+    },
+    {
+      "id": "round-two",
+      "kind": "challenge",
+      "narration": {
+        "items": [
+          {
+            "locale": "ko",
+            "text": "Jump up high to pick each banana. Reach for the sky!",
+            "audioAssetId": null
+          }
+        ],
+        "captionDefaultOn": true
+      },
+      "demo": null,
+      "challenge": {
+        "type": "jump",
+        "repetitions": 5,
+        "minRiseRatio": 0.12,
+        "landingStableMs": 300,
+        "cooldownMs": 800,
+        "timeBudgetMs": 112000,
+        "successAudioId": "success-tone",
+        "encourageAudioId": "encourage-tone"
+      },
+      "learning": {
+        "kind": "none",
+        "payload": []
+      },
+      "artAssetId": null,
+      "energy": "medium",
+      "terminal": false,
+      "transitions": [
+        {
+          "on": "success",
+          "to": "complete",
+          "adapt": null
+        },
+        {
+          "on": "struggle",
+          "to": "complete",
+          "adapt": null
+        }
+      ]
+    },
+    {
+      "id": "complete",
+      "kind": "celebration",
+      "narration": {
+        "items": [
+          {
+            "locale": "ko",
+            "text": "You picked every banana! The monkey is doing a happy dance.",
+            "audioAssetId": null
+          }
+        ],
+        "captionDefaultOn": true
+      },
+      "demo": null,
+      "challenge": null,
+      "learning": null,
+      "artAssetId": null,
+      "energy": "calm",
+      "terminal": true,
+      "transitions": []
+    }
+  ],
+  "adaptPolicy": {
+    "targetSuccessBand": [
+      0.65,
+      0.85
+    ],
+    "maxStruggleStreak": 2,
+    "maxHighEnergyMs": 60000
+  },
+  "assets": {
+    "images": [],
+    "audio": [
+      {
+        "id": "success-tone",
+        "path": "assets/audio/success.wav",
+        "mediaType": "audio/wav",
+        "locale": null,
+        "transcript": "",
+        "license": {
+          "spdxId": "MIT",
+          "name": "MIT License",
+          "url": "https://spdx.org/licenses/MIT.html",
+          "attribution": "Manse — 원숭이 바나나 (Monkey Bananas)"
+        },
+        "provenance": {
+          "kind": "original",
+          "creator": "Manse",
+          "createdAt": "2026-07-21T14:34:13.253Z"
+        }
+      },
+      {
+        "id": "encourage-tone",
+        "path": "assets/audio/encourage.wav",
+        "mediaType": "audio/wav",
+        "locale": null,
+        "transcript": "",
+        "license": {
+          "spdxId": "MIT",
+          "name": "MIT License",
+          "url": "https://spdx.org/licenses/MIT.html",
+          "attribution": "Manse — 원숭이 바나나 (Monkey Bananas)"
+        },
+        "provenance": {
+          "kind": "original",
+          "creator": "Manse",
+          "createdAt": "2026-07-21T14:34:13.253Z"
+        }
+      }
+    ],
+    "music": []
+  }
+}

@@ -1,0 +1,1 @@
+export const GAME_CONFIG = {"slug":"monkey-bananas","title":"원숭이 바나나 (Monkey Bananas)","summary":"Jump up high to pick the bananas hanging in the tree.","creator":"Manse","sourceUrl":"https://github.com/replace-me/monkey-bananas","locale":"ko"} as const;

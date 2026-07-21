@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "manse.monkey-bananas",
+  "slug": "monkey-bananas",
+  "title": [
+    {
+      "locale": "ko",
+      "text": "원숭이 바나나 (Monkey Bananas)"
+    }
+  ],
+  "summary": [
+    {
+      "locale": "ko",
+      "text": "Jump up high to pick the bananas hanging in the tree."
+    }
+  ],
+  "creator": "Manse",
+  "energy": "active",
+  "gameUrl": "https://monkey-bananas.example.invalid/",
+  "sourceUrl": "https://github.com/replace-me/monkey-bananas",
+  "engineVersion": "0.2.0",
+  "locales": [
+    "ko"
+  ],
+  "ageRange": {
+    "min": 4,
+    "max": 8
+  },
+  "movementTags": [
+    "jump"
+  ],
+  "accessibility": {
+    "captions": true,
+    "seatedMode": true,
+    "highContrast": true,
+    "reducedStimulation": true,
+    "audioCues": true
+  },
+  "thumbnail": {
+    "url": "https://monkey-bananas.example.invalid/thumbnail.png",
+    "mediaType": "image/png",
+    "alt": [
+      {
+        "locale": "ko",
+        "text": "Abstract motion-game artwork for 원숭이 바나나 (Monkey Bananas)"
+      }
+    ]
+  },
+  "license": {
+    "spdxId": "MIT",
+    "name": "MIT License",
+    "url": "https://spdx.org/licenses/MIT.html",
+    "attribution": "Manse — 원숭이 바나나 (Monkey Bananas)"
+  },
+  "contentProvenance": {
+    "hasGeneratedAssets": false,
+    "hasThirdPartyAssets": true,
+    "provenanceUrl": "https://monkey-bananas.example.invalid/asset-provenance.json"
+  },
+  "permissions": {
+    "camera": true,
+    "deviceLocalStorage": true
+  }
+}
