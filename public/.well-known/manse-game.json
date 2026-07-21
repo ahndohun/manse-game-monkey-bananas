@@ -66,7 +66,7 @@
     "attribution": "Manse — 원숭이 바나나 (Monkey Bananas)"
   },
   "contentProvenance": {
-    "hasGeneratedAssets": false,
+    "hasGeneratedAssets": true,
     "hasThirdPartyAssets": true,
     "provenanceUrl": "https://monkey-bananas.ran584000.chatgpt.site/asset-provenance.json"
   },

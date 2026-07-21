@@ -75,7 +75,13 @@ function driveSession(pack, frames) {
 /** Isolate one scene of the real pack: intro -> that scene -> terminal. */
 function harnessPackFor(sceneId) {
   const scene = packJson.scenes.find((candidate) => candidate.id === sceneId);
-  const narration = { items: [{ locale: "ko", text: "준비!", audioAssetId: null }], captionDefaultOn: true };
+  const narration = {
+    items: [
+      { locale: "ko", text: "준비!", audioAssetId: null },
+      { locale: "en", text: "Ready!", audioAssetId: null },
+    ],
+    captionDefaultOn: true,
+  };
   return parseEpisodePack({
     ...packJson,
     entrySceneId: "harness-intro",

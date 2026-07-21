@@ -2,6 +2,23 @@
   "schemaVersion": 1,
   "assets": [
     {
+      "assetId": "jungle-jump-hero",
+      "path": "assets/images/jungle-jump-hero.png",
+      "license": {
+        "spdxId": "MIT",
+        "name": "MIT License",
+        "url": "https://spdx.org/licenses/MIT.html",
+        "attribution": "Generated with OpenAI image generation for Manse — Monkey Bananas"
+      },
+      "provenance": {
+        "kind": "generated",
+        "tool": "OpenAI image generation (built-in image_gen)",
+        "model": "gpt-image-2",
+        "prompt": "Use case: stylized-concept\nAsset type: image-led game-site hero artwork, original 16:9 landscape bitmap\nPrimary request: An uplifting jungle canopy adventure for a children’s motion game: one friendly original small brown monkey joyfully leaping upward toward a cluster of ripe bananas hanging from a thick tree branch.\nScene/backdrop: lush layered tropical leaves and vines, sturdy warm bark, a soft glimpse of sky through the canopy; clearly fictional and safe.\nSubject: a fully original, non-franchise monkey character shown in an energetic but comfortable jump, reaching toward the bananas; playful expression, simple readable silhouette.\nStyle/medium: premium hand-painted storybook illustration with tactile gouache texture, refined editorial game art, polished but not photorealistic.\nComposition/framing: exact wide 16:9 composition; monkey and bananas form the central action on the right-center; quieter darker canopy space on the left supports overlaid website copy; preserve important subjects inside a safe central crop.\nLighting/mood: warm dappled morning light, adventurous, cheerful, inviting.\nColor palette: deep accessible canopy greens (#123D2B and #1F6A45), luminous banana yellow (#FFD447), warm bark orange (#C56A2A), creamy highlights (#FFF3C4); strong value separation and color contrast.\nMaterials/textures: painterly leaves, lightly textured bark, soft fur shapes without photoreal detail.\nConstraints: no text, letters, numbers, logos, trademarks, watermark, UI, borders, photorealistic children, recognizable copyrighted characters, dangerous heights, frightening animals, or clutter; do not depict any human or identifiable person. Original IP only. Landscape 16:9.",
+        "generatedAt": "2026-07-21T18:43:38.000Z"
+      }
+    },
+    {
       "assetId": "success-tone",
       "path": "assets/audio/success.wav",
       "license": {

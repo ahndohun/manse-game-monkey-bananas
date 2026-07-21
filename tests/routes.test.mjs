@@ -24,6 +24,15 @@ test("server-renders the anonymous game start experience", async () => {
   assert.doesNotMatch(html, /signin-with-chatgpt|<iframe\b|<form\b/i);
 });
 
+test("keeps start controls clickable while localizing the runtime", async () => {
+  const clientSource = await readFile("app/GameClient.tsx", "utf8");
+  assert.match(clientSource, /closest\("button, a"\)/);
+  assert.match(clientSource, /createMansePlayer\(\{[\s\S]*?locale,/);
+  assert.match(clientSource, /await player\?\.destroy\(\)/);
+  assert.match(clientSource, /selectLocale\("ko"\)/);
+  assert.match(clientSource, /selectLocale\("en"\)/);
+});
+
 test("build bundles the public contract and pose runtime", async () => {
   const manifest = JSON.parse(await readFile("public/.well-known/manse-game.json", "utf8"));
   assert.equal(typeof manifest.slug, "string");

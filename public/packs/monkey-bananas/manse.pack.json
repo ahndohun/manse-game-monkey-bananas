@@ -5,18 +5,27 @@
     "title": [
       {
         "locale": "ko",
-        "text": "원숭이 바나나 (Monkey Bananas)"
+        "text": "원숭이 바나나"
+      },
+      {
+        "locale": "en",
+        "text": "Monkey Bananas"
       }
     ],
     "summary": [
       {
         "locale": "ko",
-        "text": "Jump up high to pick the bananas hanging in the tree."
+        "text": "정글 친구와 함께 가볍게 뛰어 나무에 매달린 바나나 다섯 송이를 따 보세요."
+      },
+      {
+        "locale": "en",
+        "text": "Leap through the jungle with a cheerful friend and collect five bananas hanging in the tree."
       }
     ],
-    "theme": "A jungle tree where a hungry little monkey jumps to pick bananas hanging high above",
+    "theme": "A sunlit jungle canopy where a cheerful little monkey leaps to collect ripe bananas",
     "locales": [
-      "ko"
+      "ko",
+      "en"
     ],
     "ageBands": [
       "4-5",
@@ -44,11 +53,15 @@
       "name": [
         {
           "locale": "ko",
-          "text": "Guide"
+          "text": "바나나 친구"
+        },
+        {
+          "locale": "en",
+          "text": "Banana Buddy"
         }
       ],
       "artAssetId": null,
-      "description": "A neutral runtime guide rendered without a character asset."
+      "description": "A friendly guide who encourages comfortable, unhurried jumps."
     }
   ],
   "entrySceneId": "welcome",
@@ -60,7 +73,12 @@
         "items": [
           {
             "locale": "ko",
-            "text": "Yum! Bananas are hanging high in the tree. Are you hungry?",
+            "text": "앗, 나무 높은 곳에 노란 바나나가 열렸어요. 원숭이 친구와 함께 따 볼까요?",
+            "audioAssetId": null
+          },
+          {
+            "locale": "en",
+            "text": "Look! Bright bananas are hanging in the tree. Shall we collect them with our monkey friend?",
             "audioAssetId": null
           }
         ],
@@ -69,7 +87,7 @@
       "demo": null,
       "challenge": null,
       "learning": null,
-      "artAssetId": null,
+      "artAssetId": "jungle-jump-hero",
       "energy": "calm",
       "terminal": false,
       "transitions": [
@@ -87,7 +105,12 @@
         "items": [
           {
             "locale": "ko",
-            "text": "Jump up high to pick each banana. Reach for the sky!",
+            "text": "편안히 선 뒤 가볍게 뛰어 바나나를 따세요. 무리하지 말고 천천히 해도 좋아요!",
+            "audioAssetId": null
+          },
+          {
+            "locale": "en",
+            "text": "Stand comfortably, then make a gentle jump to collect each banana. Take your time and never strain.",
             "audioAssetId": null
           }
         ],
@@ -138,7 +161,12 @@
         "items": [
           {
             "locale": "ko",
-            "text": "Jump up high to pick each banana. Reach for the sky!",
+            "text": "좋아요! 숨을 고르고, 준비되면 편안한 높이로 한 번씩 뛰어 보세요.",
+            "audioAssetId": null
+          },
+          {
+            "locale": "en",
+            "text": "You are doing great. Catch your breath, then jump only as high as feels comfortable.",
             "audioAssetId": null
           }
         ],
@@ -182,7 +210,12 @@
         "items": [
           {
             "locale": "ko",
-            "text": "You picked every banana! The monkey is doing a happy dance.",
+            "text": "바나나를 모두 땄어요! 원숭이 친구가 신나게 춤을 춰요.",
+            "audioAssetId": null
+          },
+          {
+            "locale": "en",
+            "text": "You collected every banana! Our monkey friend is doing a happy dance.",
             "audioAssetId": null
           }
         ],
@@ -191,7 +224,7 @@
       "demo": null,
       "challenge": null,
       "learning": null,
-      "artAssetId": null,
+      "artAssetId": "jungle-jump-hero",
       "energy": "calm",
       "terminal": true,
       "transitions": []
@@ -206,7 +239,36 @@
     "maxHighEnergyMs": 60000
   },
   "assets": {
-    "images": [],
+    "images": [
+      {
+        "id": "jungle-jump-hero",
+        "path": "assets/images/jungle-jump-hero.png",
+        "mediaType": "image/png",
+        "alt": [
+          {
+            "locale": "ko",
+            "text": "햇살이 비치는 정글에서 작은 원숭이가 나뭇가지의 노란 바나나를 향해 뛰어오르는 그림"
+          },
+          {
+            "locale": "en",
+            "text": "A little monkey leaps toward bright yellow bananas in a sunlit jungle canopy"
+          }
+        ],
+        "license": {
+          "spdxId": "MIT",
+          "name": "MIT License",
+          "url": "https://spdx.org/licenses/MIT.html",
+          "attribution": "Generated with OpenAI image generation for Manse — Monkey Bananas"
+        },
+        "provenance": {
+          "kind": "generated",
+          "tool": "OpenAI image generation (built-in image_gen)",
+          "model": "gpt-image-2",
+          "prompt": "Use case: stylized-concept\nAsset type: image-led game-site hero artwork, original 16:9 landscape bitmap\nPrimary request: An uplifting jungle canopy adventure for a children’s motion game: one friendly original small brown monkey joyfully leaping upward toward a cluster of ripe bananas hanging from a thick tree branch.\nScene/backdrop: lush layered tropical leaves and vines, sturdy warm bark, a soft glimpse of sky through the canopy; clearly fictional and safe.\nSubject: a fully original, non-franchise monkey character shown in an energetic but comfortable jump, reaching toward the bananas; playful expression, simple readable silhouette.\nStyle/medium: premium hand-painted storybook illustration with tactile gouache texture, refined editorial game art, polished but not photorealistic.\nComposition/framing: exact wide 16:9 composition; monkey and bananas form the central action on the right-center; quieter darker canopy space on the left supports overlaid website copy; preserve important subjects inside a safe central crop.\nLighting/mood: warm dappled morning light, adventurous, cheerful, inviting.\nColor palette: deep accessible canopy greens (#123D2B and #1F6A45), luminous banana yellow (#FFD447), warm bark orange (#C56A2A), creamy highlights (#FFF3C4); strong value separation and color contrast.\nMaterials/textures: painterly leaves, lightly textured bark, soft fur shapes without photoreal detail.\nConstraints: no text, letters, numbers, logos, trademarks, watermark, UI, borders, photorealistic children, recognizable copyrighted characters, dangerous heights, frightening animals, or clutter; do not depict any human or identifiable person. Original IP only. Landscape 16:9.",
+          "generatedAt": "2026-07-21T18:43:38.000Z"
+        }
+      }
+    ],
     "audio": [
       {
         "id": "success-tone",
