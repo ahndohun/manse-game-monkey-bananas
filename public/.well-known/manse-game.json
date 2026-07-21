@@ -5,22 +5,31 @@
   "title": [
     {
       "locale": "ko",
-      "text": "원숭이 바나나 (Monkey Bananas)"
+      "text": "원숭이 바나나"
+    },
+    {
+      "locale": "en",
+      "text": "Monkey Bananas"
     }
   ],
   "summary": [
     {
       "locale": "ko",
+      "text": "높이 뛰어 나무에 매달린 바나나를 따세요."
+    },
+    {
+      "locale": "en",
       "text": "Jump up high to pick the bananas hanging in the tree."
     }
   ],
   "creator": "Manse",
   "energy": "active",
-  "gameUrl": "https://monkey-bananas.example.invalid/",
+  "gameUrl": "https://monkey-bananas.ran584000.chatgpt.site/",
   "sourceUrl": "https://github.com/ahndohun/manse-game-monkey-bananas",
   "engineVersion": "0.2.0",
   "locales": [
-    "ko"
+    "ko",
+    "en"
   ],
   "ageRange": {
     "min": 4,
@@ -37,12 +46,16 @@
     "audioCues": true
   },
   "thumbnail": {
-    "url": "https://monkey-bananas.example.invalid/thumbnail.png",
+    "url": "https://monkey-bananas.ran584000.chatgpt.site/thumbnail.png",
     "mediaType": "image/png",
     "alt": [
       {
         "locale": "ko",
-        "text": "Abstract motion-game artwork for 원숭이 바나나 (Monkey Bananas)"
+        "text": "원숭이 바나나 모션 게임 아트워크"
+      },
+      {
+        "locale": "en",
+        "text": "Motion-game artwork for Monkey Bananas"
       }
     ]
   },
@@ -55,7 +68,7 @@
   "contentProvenance": {
     "hasGeneratedAssets": false,
     "hasThirdPartyAssets": true,
-    "provenanceUrl": "https://monkey-bananas.example.invalid/asset-provenance.json"
+    "provenanceUrl": "https://monkey-bananas.ran584000.chatgpt.site/asset-provenance.json"
   },
   "permissions": {
     "camera": true,
