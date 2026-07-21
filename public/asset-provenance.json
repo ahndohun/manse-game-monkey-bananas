@@ -13,11 +13,15 @@
     },
     {
       "path": "/thumbnail.png",
-      "origin": "original-procedural",
-      "creator": "Manse",
-      "createdAt": "2026-07-21T14:34:13.253Z",
+      "origin": "generated",
+      "tool": "OpenAI image generation (built-in imagegen); center-cropped and resized with macOS sips",
+      "model": "gpt-image-2",
+      "prompt": "Use case: stylized-concept\nAsset type: image-led game-site hero artwork, original 16:9 landscape bitmap\nPrimary request: An uplifting jungle canopy adventure for a children’s motion game: one friendly original small brown monkey joyfully leaping upward toward a cluster of ripe bananas hanging from a thick tree branch.",
+      "generatedAt": "2026-07-21T18:43:38.000Z",
+      "derivedFrom": "/packs/monkey-bananas/assets/images/jungle-jump-hero.png",
+      "transformation": "Center-cropped from 1672x941 to 1672x878 and resized to 1200x630.",
       "license": "MIT",
-      "sha256": "c458052c3dbf05f85536f886ad1de83c27829269205e5656e9f57bf5b6b376f4"
+      "sha256": "6413001389ffb3ab93803c18573da310d485ae673931e714738e58cb3f150c51"
     },
     {
       "path": "/packs/monkey-bananas/assets/audio/success.wav",
