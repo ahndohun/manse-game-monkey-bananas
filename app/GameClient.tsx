@@ -189,7 +189,7 @@ export function GameClient() {
         </div>
         <div className="player-footer" aria-live="polite">
           <span>{error ?? snapshot.caption ?? copy.comfort}</span>
-          <strong aria-label={copy.progressLabel}>{progress === null ? "—" : `${progress.completed} / ${progress.total}`}</strong>
+          <strong aria-label={copy.progressLabel}>{progress === null ? copy.progressReady : `${progress.completed} / ${progress.total}`}</strong>
         </div>
         {snapshot.phase !== "idle" && (
           <div className="restart-row">

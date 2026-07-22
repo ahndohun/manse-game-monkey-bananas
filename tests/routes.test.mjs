@@ -33,6 +33,19 @@ test("keeps start controls clickable while localizing the runtime", async () => 
   assert.match(clientSource, /selectLocale\("en"\)/);
 });
 
+test("uses purposeful localized idle progress without dash placeholders", async () => {
+  const response = await render();
+  const html = await response.text();
+  const body = html.match(/<body[\s\S]*?<\/body>/i)?.[0] ?? html;
+  assert.match(body, />Ready</);
+  assert.doesNotMatch(body, /[—–]/);
+
+  const copySource = await readFile("app/game-config.ts", "utf8");
+  assert.match(copySource, /progressReady: "준비"/);
+  assert.match(copySource, /progressReady: "Ready"/);
+  assert.doesNotMatch(copySource, /[—–]/);
+});
+
 test("connects the compact platform shell to the exact public Showcase", async () => {
   const response = await render();
   const html = await response.text();
