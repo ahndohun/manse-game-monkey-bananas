@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "status": "approved",
+  "identity": {
+    "fantasy": "Leap through a living jungle canopy beside a cheerful monkey and harvest five golden banana bunches into a woven basket.",
+    "playerVerb": "Make comfortable jumps to pick each glowing banana bunch.",
+    "targetMetaphor": "Five visible banana bunches that glow, pop free, arc into the basket, and remain visibly collected."
+  },
+  "beats": [
+    { "id": "round-one", "purpose": "Learn two forgiving low-canopy jumps and see the first bananas fly into the basket." },
+    { "id": "round-two", "purpose": "Climb into the middle canopy for two slightly higher, quicker harvest jumps." },
+    { "id": "round-three", "purpose": "Reach one final golden banana and trigger the monkey's full basket celebration." }
+  ],
+  "presenter": {
+    "source": "app/themed-renderer.ts",
+    "themedEntities": ["five-bunch banana course", "woven harvest basket", "expressive code-native monkey", "painted jungle canopy set"],
+    "reactiveStates": ["glowing active banana", "banana flying toward the basket", "collected banana with check mark and monkey reaction"],
+    "continuousFeedback": "A room-readable jump cue, current banana tally, active-bunch pulse, harvest arc, reaction callout, and basket fill respond through every jump.",
+    "scoreAndResolution": "A persistent five-banana mission tally survives all three authored rounds and resolves with a localized full-basket panel, monkey dance, and jungle confetti."
+  },
+  "qualityGates": {
+    "themedEntitiesInPlay": true,
+    "threeReactiveStates": true,
+    "continuousInputFeedback": true,
+    "authoredEscalation": true,
+    "scoreAndResolution": true,
+    "threeGameplaySounds": true,
+    "noDebugChrome": true,
+    "cameraSimulatorParity": true,
+    "reducedMotionVerified": true
+  },
+  "evidence": {
+    "gameplayScreenshot": "evidence/monkey-bananas-gameplay.png",
+    "completionScreenshot": "evidence/monkey-bananas-victory.png",
+    "playtestNotes": "evidence/playtest-notes.md"
+  }
+}

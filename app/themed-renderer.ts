@@ -1,11 +1,11 @@
 import {
-  createDefaultRenderer,
   type RendererFactory,
+  type RendererFactoryOptions,
   type RuntimeRenderFrame,
   type RuntimeRenderer,
 } from "@manse/runtime-web";
+import type { GameLocale } from "./game-config";
 
-const ART_URL = "/packs/monkey-bananas/assets/images/jungle-jump-hero.png";
 const THEME = {
   banana: "#ffd447",
   bananaShade: "#e9a91d",
@@ -18,67 +18,117 @@ const THEME = {
   maxDpr: 2,
 } as const;
 
+const TOTAL_BANANAS = 5;
+const SIMULATOR_ART_URL = "/packs/monkey-bananas/assets/images/jungle-jump-hero.png";
+const FONT = '"Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif';
+const COPY = {
+  en: {
+    aria: "Jungle jump play field with five collectible banana bunches and a cheering monkey",
+    mission: "CANOPY HARVEST",
+    progress: "BANANAS",
+    cue: "JUMP TO PICK",
+    reactions: ["GREAT PICK!", "NICE LEAP!", "BANANA CAUGHT!", "WHAT A JUMP!", "BASKET READY!"],
+    complete: "BASKET FULL!",
+    completeBody: "Five golden bananas are safe. The jungle is celebrating!",
+    camera: "LOCAL CAMERA · LIVE",
+    simulator: "JUNGLE TRAINING · LIVE",
+  },
+  ko: {
+    aria: "바나나 다섯 송이와 응원하는 원숭이가 있는 정글 점프 게임 공간",
+    mission: "정글 바나나 수확",
+    progress: "모은 바나나",
+    cue: "점프해서 따기",
+    reactions: ["멋지게 땄어요!", "좋은 점프예요!", "바나나 획득!", "정말 높이 뛰었어요!", "바구니 준비 완료!"],
+    complete: "바구니 가득!",
+    completeBody: "황금 바나나 다섯 송이를 모두 모았어요. 정글 친구들이 축하해요!",
+    camera: "기기 내 카메라 · 실행 중",
+    simulator: "정글 포인터 훈련 · 실행 중",
+  },
+} as const;
+
 type Burst = { x: number; y: number; startedAt: number };
 
-export const createMonkeyBananasRenderer: RendererFactory = (options): RuntimeRenderer => {
-  const base = createDefaultRenderer(options);
-  Object.assign(base.element.style, {
-    backgroundImage: `linear-gradient(rgba(3,31,18,.05), rgba(3,25,17,.34)), url('${ART_URL}')`,
-    backgroundPosition: "center",
-    backgroundSize: "cover",
-  });
-  base.element.setAttribute(
-    "aria-label",
-    "Jungle jump play field with five collectible banana bunches and a cheering monkey",
-  );
+export function createMonkeyBananasRendererFactory(locale: GameLocale): RendererFactory {
+  return (options) => new MonkeyBananasRenderer(options, locale);
+}
 
-  const cameraSurface = base.element.firstElementChild as HTMLElement | null;
-  if (cameraSurface?.tagName === "CANVAS") cameraSurface.style.opacity = "0.36";
+class MonkeyBananasRenderer implements RuntimeRenderer {
+  readonly kind = "canvas2d" as const;
+  readonly element: HTMLDivElement;
+  private readonly canvas: HTMLCanvasElement;
+  private readonly context: CanvasRenderingContext2D;
+  private readonly simulatorArt: HTMLImageElement;
+  private readonly copy: (typeof COPY)[GameLocale];
+  private readonly bursts: Burst[] = [];
+  private sceneCompleted = 0;
+  private missionCompleted = 0;
+  private reactionUnit = 0;
+  private reactionStartedAt = Number.NEGATIVE_INFINITY;
+  private destroyed = false;
 
-  const canvas = options.document.createElement("canvas");
-  canvas.dataset.gameForeground = "monkey-bananas";
-  canvas.setAttribute("aria-hidden", "true");
-  Object.assign(canvas.style, {
-    position: "absolute",
-    inset: "0",
-    width: "100%",
-    height: "100%",
-    pointerEvents: "none",
-  });
-  base.element.append(canvas);
-  const context = canvas.getContext("2d");
-  if (context === null) return base;
+  constructor(options: RendererFactoryOptions, locale: GameLocale) {
+    this.copy = COPY[locale];
+    this.element = options.document.createElement("div");
+    this.element.dataset.manseRenderer = "monkey-bananas";
+    this.element.setAttribute("role", "img");
+    this.element.setAttribute("aria-label", this.copy.aria);
+    Object.assign(this.element.style, {
+      position: "relative",
+      width: "100%",
+      height: "100%",
+      minHeight: "320px",
+      overflow: "hidden",
+      background: THEME.leafDark,
+      touchAction: "none",
+    });
+    this.canvas = options.document.createElement("canvas");
+    this.canvas.setAttribute("aria-hidden", "true");
+    Object.assign(this.canvas.style, { position: "absolute", inset: "0", width: "100%", height: "100%" });
+    const context = this.canvas.getContext("2d", { alpha: false });
+    if (context === null) throw new Error("Canvas 2D is unavailable.");
+    this.context = context;
+    this.simulatorArt = options.document.createElement("img");
+    this.simulatorArt.decoding = "async";
+    this.simulatorArt.src = SIMULATOR_ART_URL;
+    this.element.append(this.canvas);
+    options.container.append(this.element);
+  }
 
-  let lastCompleted = 0;
-  let lastTotal = 5;
-  let reactionUnit = 0;
-  let reactionStartedAt = Number.NEGATIVE_INFINITY;
-  const bursts: Burst[] = [];
-
-  const render = (frame: RuntimeRenderFrame) => {
-    base.render(frame);
-    const { width, height } = prepareCanvas(canvas, context, THEME.maxDpr);
+  render(frame: RuntimeRenderFrame): void {
+    if (this.destroyed) return;
+    const { canvas, context } = this;
+    const { width, height } = prepareCanvas(this.element, canvas, context, frame.tier);
     if (width === 0 || height === 0) return;
     context.clearRect(0, 0, width, height);
 
+    if (frame.video !== null && frame.video.readyState >= 2) {
+      drawVideoCover(context, frame.video, width, height, frame.mirror);
+      drawCameraGrade(context, width, height);
+    } else if (this.simulatorArt.complete && this.simulatorArt.naturalWidth > 0) {
+      drawImageCover(context, this.simulatorArt, width, height);
+      drawSimulatorGrade(context, width, height);
+    } else {
+      drawJungleSet(context, width, height, frame.timestampMs, frame.reducedStimulation);
+    }
+
     const guide = frame.challenge?.kind === "jump" ? frame.challenge : null;
-    if (guide !== null) lastTotal = Math.max(guide.totalUnits, 1);
-    const completed = guide?.completedUnits ?? (frame.celebrationProgress > 0 ? lastCompleted : 0);
-    const total = lastTotal;
-    if (guide !== null && completed < lastCompleted) lastCompleted = 0;
-    if (completed > lastCompleted) {
-      for (let unit = lastCompleted; unit < completed; unit += 1) {
-        const point = bananaPoint(unit, total, width, height);
-        bursts.push({ x: point.x, y: point.y, startedAt: frame.timestampMs });
+    if (guide !== null && guide.completedUnits < this.sceneCompleted) this.sceneCompleted = 0;
+    if (guide !== null && guide.completedUnits > this.sceneCompleted) {
+      const gained = guide.completedUnits - this.sceneCompleted;
+      for (let step = 0; step < gained; step += 1) {
+        const nextUnit = Math.min(TOTAL_BANANAS, this.missionCompleted + step + 1);
+        const point = bananaPoint(nextUnit - 1, TOTAL_BANANAS, width, height);
+        this.bursts.push({ x: point.x, y: point.y, startedAt: frame.timestampMs });
       }
-      reactionUnit = completed;
-      reactionStartedAt = frame.timestampMs;
-      lastCompleted = completed;
+      this.missionCompleted = Math.min(TOTAL_BANANAS, this.missionCompleted + gained);
+      this.reactionUnit = this.missionCompleted;
+      this.reactionStartedAt = frame.timestampMs;
+      this.sceneCompleted = guide.completedUnits;
     }
 
     drawCanopyFrame(context, width, height, frame.timestampMs, frame.reducedStimulation);
-    drawBananaCourse(context, width, height, total, completed, frame.timestampMs, frame.reducedStimulation);
-    drawBasket(context, width * 0.84, height * 0.83, Math.min(width, height) * 0.13, completed);
+    drawBananaCourse(context, width, height, TOTAL_BANANAS, this.missionCompleted, frame.timestampMs, frame.reducedStimulation);
+    drawBasket(context, width * 0.84, height * 0.83, Math.min(width, height) * 0.13, this.missionCompleted);
     drawMonkey(
       context,
       width * 0.16,
@@ -87,41 +137,53 @@ export const createMonkeyBananasRenderer: RendererFactory = (options): RuntimeRe
       frame.timestampMs,
       frame.reducedStimulation,
       guide?.phase === "active" || guide?.phase === "holding",
-      reactionUnit > 0 ? Math.min(1, Math.max(0, (frame.timestampMs - reactionStartedAt) / THEME.reactionMs)) : 1,
+      this.reactionUnit > 0 ? Math.min(1, Math.max(0, (frame.timestampMs - this.reactionStartedAt) / THEME.reactionMs)) : 1,
       frame.celebrationProgress,
     );
     drawJumpCue(context, width, height, guide?.progress ?? 0, guide?.phase ?? "idle", frame.timestampMs, frame.reducedStimulation);
 
-    for (let index = bursts.length - 1; index >= 0; index -= 1) {
-      const age = frame.timestampMs - bursts[index].startedAt;
+    for (let index = this.bursts.length - 1; index >= 0; index -= 1) {
+      const age = frame.timestampMs - this.bursts[index].startedAt;
       if (age > THEME.reactionMs) {
-        bursts.splice(index, 1);
+        this.bursts.splice(index, 1);
         continue;
       }
-      drawHarvestBurst(context, bursts[index], age / THEME.reactionMs, width, height, frame.reducedStimulation);
+      drawHarvestBurst(context, this.bursts[index], age / THEME.reactionMs, width, height, frame.reducedStimulation);
     }
 
     if (frame.celebrationProgress > 0) {
       drawCelebration(context, width, height, frame.celebrationProgress, frame.timestampMs, frame.reducedStimulation);
     }
-  };
+    drawMonkeyHud(
+      context,
+      width,
+      height,
+      frame,
+      this.copy,
+      this.missionCompleted,
+      this.reactionUnit,
+      this.reactionStartedAt,
+    );
+  }
 
-  return {
-    kind: base.kind,
-    element: base.element,
-    render,
-    destroy() {
-      canvas.remove();
-      base.destroy();
-    },
-  };
-};
+  destroy(): void {
+    this.destroyed = true;
+    this.bursts.length = 0;
+    this.element.remove();
+  }
+}
 
-function prepareCanvas(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, maxDpr: number) {
-  const rect = canvas.getBoundingClientRect();
-  const width = Math.max(0, rect.width);
-  const height = Math.max(0, rect.height);
-  const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+function prepareCanvas(
+  element: HTMLElement,
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D,
+  tier: RuntimeRenderFrame["tier"],
+) {
+  const width = Math.max(1, element.clientWidth || 960);
+  const height = Math.max(1, element.clientHeight || 620);
+  const deviceRatio = typeof devicePixelRatio === "number" ? devicePixelRatio : 1;
+  const tierLimit = tier === "S" || tier === "A" ? THEME.maxDpr : tier === "B" ? 1.5 : 1;
+  const dpr = Math.min(deviceRatio, tierLimit);
   const pixelWidth = Math.round(width * dpr);
   const pixelHeight = Math.round(height * dpr);
   if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
@@ -130,6 +192,179 @@ function prepareCanvas(canvas: HTMLCanvasElement, context: CanvasRenderingContex
   }
   context.setTransform(dpr, 0, 0, dpr, 0, 0);
   return { width, height };
+}
+
+function drawVideoCover(
+  context: CanvasRenderingContext2D,
+  video: HTMLVideoElement,
+  width: number,
+  height: number,
+  mirror: boolean,
+) {
+  const sourceWidth = Math.max(1, video.videoWidth || 1280);
+  const sourceHeight = Math.max(1, video.videoHeight || 720);
+  const sourceRatio = sourceWidth / sourceHeight;
+  const targetRatio = width / height;
+  let sx = 0;
+  let sy = 0;
+  let sw = sourceWidth;
+  let sh = sourceHeight;
+  if (sourceRatio > targetRatio) {
+    sw = sourceHeight * targetRatio;
+    sx = (sourceWidth - sw) / 2;
+  } else {
+    sh = sourceWidth / targetRatio;
+    sy = (sourceHeight - sh) / 2;
+  }
+  context.save();
+  if (mirror) {
+    context.translate(width, 0);
+    context.scale(-1, 1);
+  }
+  context.drawImage(video, sx, sy, sw, sh, 0, 0, width, height);
+  context.restore();
+}
+
+function drawCameraGrade(context: CanvasRenderingContext2D, width: number, height: number) {
+  const vignette = context.createRadialGradient(width * 0.5, height * 0.44, width * 0.08, width * 0.5, height * 0.48, width * 0.74);
+  vignette.addColorStop(0, "rgba(6,35,24,.02)");
+  vignette.addColorStop(0.7, "rgba(6,35,24,.12)");
+  vignette.addColorStop(1, "rgba(3,22,15,.68)");
+  context.fillStyle = vignette;
+  context.fillRect(0, 0, width, height);
+}
+
+function drawImageCover(context: CanvasRenderingContext2D, image: HTMLImageElement, width: number, height: number) {
+  const sourceRatio = image.naturalWidth / image.naturalHeight;
+  const targetRatio = width / height;
+  let sx = 0;
+  let sy = 0;
+  let sw = image.naturalWidth;
+  let sh = image.naturalHeight;
+  if (sourceRatio > targetRatio) {
+    sw = image.naturalHeight * targetRatio;
+    sx = (image.naturalWidth - sw) / 2;
+  } else {
+    sh = image.naturalWidth / targetRatio;
+    sy = (image.naturalHeight - sh) / 2;
+  }
+  context.drawImage(image, sx, sy, sw, sh, 0, 0, width, height);
+}
+
+function drawSimulatorGrade(context: CanvasRenderingContext2D, width: number, height: number) {
+  const grade = context.createLinearGradient(0, 0, 0, height);
+  grade.addColorStop(0, "rgba(3,24,16,.1)");
+  grade.addColorStop(0.58, "rgba(3,24,16,.18)");
+  grade.addColorStop(1, "rgba(3,20,14,.68)");
+  context.fillStyle = grade;
+  context.fillRect(0, 0, width, height);
+}
+
+function drawJungleSet(context: CanvasRenderingContext2D, width: number, height: number, time: number, reduced: boolean) {
+  const sky = context.createLinearGradient(0, 0, 0, height);
+  sky.addColorStop(0, "#4fa17b");
+  sky.addColorStop(0.52, "#1f6a45");
+  sky.addColorStop(1, "#071d16");
+  context.fillStyle = sky;
+  context.fillRect(0, 0, width, height);
+  const sun = context.createRadialGradient(width * 0.72, height * 0.18, 0, width * 0.72, height * 0.18, width * 0.42);
+  sun.addColorStop(0, "rgba(255,238,155,.42)");
+  sun.addColorStop(1, "rgba(255,238,155,0)");
+  context.fillStyle = sun;
+  context.fillRect(0, 0, width, height);
+  context.fillStyle = "#0d422d";
+  context.beginPath();
+  context.moveTo(0, height * 0.72);
+  for (let index = 0; index <= 10; index += 1) {
+    const x = (index / 10) * width;
+    const y = height * (0.68 + (index % 3) * 0.045);
+    context.lineTo(x, y);
+  }
+  context.lineTo(width, height);
+  context.lineTo(0, height);
+  context.fill();
+  const drift = reduced ? 0 : Math.sin(time / 1_500) * width * 0.008;
+  context.fillStyle = "rgba(8,48,32,.72)";
+  for (let index = 0; index < 6; index += 1) {
+    context.beginPath();
+    context.arc(width * (index * 0.2) + drift, height * (0.68 + (index % 2) * 0.06), width * 0.13, 0, Math.PI * 2);
+    context.fill();
+  }
+}
+
+function drawMonkeyHud(
+  context: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  frame: RuntimeRenderFrame,
+  copy: (typeof COPY)[GameLocale],
+  completed: number,
+  reactionUnit: number,
+  reactionStartedAt: number,
+) {
+  context.save();
+  context.fillStyle = "rgba(4,29,20,.82)";
+  context.strokeStyle = "rgba(255,244,207,.36)";
+  context.lineWidth = 1.5;
+  context.beginPath();
+  context.roundRect(width * 0.03, height * 0.035, width * 0.3, Math.max(54, height * 0.09), 18);
+  context.fill();
+  context.stroke();
+  context.fillStyle = THEME.banana;
+  context.font = `800 ${Math.max(12, width * 0.014)}px ${FONT}`;
+  context.textAlign = "left";
+  context.fillText(copy.mission, width * 0.052, height * 0.072);
+  context.fillStyle = THEME.cream;
+  context.font = `900 ${Math.max(18, width * 0.025)}px ${FONT}`;
+  context.fillText(`${copy.progress}  ${completed}/${TOTAL_BANANAS}`, width * 0.052, height * 0.115);
+  context.textAlign = "right";
+  context.font = `750 ${Math.max(11, width * 0.012)}px ${FONT}`;
+  context.fillText(frame.video !== null ? copy.camera : copy.simulator, width * 0.97, height * 0.07);
+
+  const reactionAge = frame.timestampMs - reactionStartedAt;
+  if (reactionUnit > 0 && reactionAge >= 0 && reactionAge < THEME.reactionMs) {
+    const alpha = Math.sin((reactionAge / THEME.reactionMs) * Math.PI);
+    context.globalAlpha = alpha;
+    context.textAlign = "center";
+    context.fillStyle = THEME.cream;
+    context.strokeStyle = "rgba(43,31,8,.75)";
+    context.lineWidth = 6;
+    context.font = `950 ${Math.max(30, width * 0.052)}px ${FONT}`;
+    const text = copy.reactions[Math.min(copy.reactions.length - 1, reactionUnit - 1)];
+    context.strokeText(text, width * 0.5, height * 0.46);
+    context.fillText(text, width * 0.5, height * 0.46);
+  } else if (frame.challenge !== null && frame.celebrationProgress === 0) {
+    context.globalAlpha = 0.94;
+    context.textAlign = "center";
+    context.fillStyle = THEME.cream;
+    context.font = `850 ${Math.max(16, width * 0.022)}px ${FONT}`;
+    context.fillText(copy.cue, width * 0.5, height * 0.92);
+  }
+  context.globalAlpha = 1;
+  if (frame.celebrationProgress > 0 && completed >= TOTAL_BANANAS) {
+    context.fillStyle = "rgba(4,29,20,.86)";
+    context.beginPath();
+    context.roundRect(width * 0.2, height * 0.34, width * 0.6, height * 0.27, 28);
+    context.fill();
+    context.textAlign = "center";
+    context.fillStyle = THEME.banana;
+    context.font = `950 ${Math.max(34, width * 0.065)}px ${FONT}`;
+    context.fillText(copy.complete, width * 0.5, height * 0.46);
+    context.fillStyle = THEME.cream;
+    context.font = `650 ${Math.max(14, width * 0.018)}px ${FONT}`;
+    context.fillText(copy.completeBody, width * 0.5, height * 0.535, width * 0.52);
+  }
+  if (frame.caption !== null && frame.celebrationProgress === 0) {
+    context.fillStyle = "rgba(3,20,15,.78)";
+    context.beginPath();
+    context.roundRect(width * 0.16, height * 0.79, width * 0.68, height * 0.075, 16);
+    context.fill();
+    context.textAlign = "center";
+    context.fillStyle = "white";
+    context.font = `650 ${Math.max(13, width * 0.017)}px ${FONT}`;
+    context.fillText(frame.caption, width * 0.5, height * 0.838, width * 0.62);
+  }
+  context.restore();
 }
 
 function bananaPoint(index: number, total: number, width: number, height: number) {

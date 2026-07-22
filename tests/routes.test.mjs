@@ -33,6 +33,28 @@ test("keeps start controls clickable while localizing the runtime", async () => 
   assert.match(clientSource, /selectLocale\("en"\)/);
 });
 
+test("ships a locale-aware full-strength game renderer", async () => {
+  const source = await readFile("app/themed-renderer.ts", "utf8");
+  assert.doesNotMatch(source, /createDefaultRenderer/);
+  assert.match(source, /jungle-jump-hero\.png/);
+  assert.match(source, /drawImageCover/);
+  assert.match(source, /implements RuntimeRenderer/);
+  assert.match(source, /drawVideoCover\(context, frame\.video,[\s\S]*frame\.mirror\)/);
+  assert.match(source, /drawJungleSet/);
+  assert.match(source, /createMonkeyBananasRendererFactory\(locale: GameLocale\)/);
+  assert.match(source, /BASKET FULL!/);
+  assert.match(source, /바구니 가득!/);
+});
+
+test("wires the pointer-compatible full-body jump provider without touching camera mode", async () => {
+  const client = await readFile("app/GameClient.tsx", "utf8");
+  const provider = await readFile("app/jump-provider.ts", "utf8");
+  assert.match(client, /providerFactory: createMonkeyJumpProvider/);
+  assert.match(provider, /options\.kind !== "simulated"/);
+  assert.match(provider, /landmarks: pose\.landmarks\.map/);
+  assert.match(provider, /landmark\.y - rise/);
+});
+
 test("build bundles the public contract and pose runtime", async () => {
   const manifest = JSON.parse(await readFile("public/.well-known/manse-game.json", "utf8"));
   assert.equal(typeof manifest.slug, "string");

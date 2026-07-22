@@ -47,6 +47,36 @@
         "creator": "Manse",
         "createdAt": "2026-07-21T14:34:13.253Z"
       }
+    },
+    {
+      "assetId": "beat-tone-en",
+      "path": "assets/audio/beat-en.wav",
+      "license": {
+        "spdxId": "MIT",
+        "name": "MIT License",
+        "url": "https://spdx.org/licenses/MIT.html",
+        "attribution": "Manse — Monkey Bananas"
+      },
+      "provenance": {
+        "kind": "original",
+        "creator": "Manse",
+        "createdAt": "2026-07-22T00:00:00.000Z"
+      }
+    },
+    {
+      "assetId": "beat-tone-ko",
+      "path": "assets/audio/beat-ko.wav",
+      "license": {
+        "spdxId": "MIT",
+        "name": "MIT License",
+        "url": "https://spdx.org/licenses/MIT.html",
+        "attribution": "Manse — Monkey Bananas"
+      },
+      "provenance": {
+        "kind": "original",
+        "creator": "Manse",
+        "createdAt": "2026-07-22T00:00:00.000Z"
+      }
     }
   ]
 }

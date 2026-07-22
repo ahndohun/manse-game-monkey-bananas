@@ -169,20 +169,45 @@ for (const scene of challengeScenes) {
 }
 
 test("full pack: child motion completes the real scene flow end-to-end", () => {
-  const first = challengeScenes[0];
-  const script = scriptForChallenge(first.challenge);
-  const { events } = driveSession(parseEpisodePack(packJson), synthesizePoseFrames(script));
+  const pack = parseEpisodePack(packJson);
+  const events = [];
+  let now = 0;
+  let sequenceOffset = 0;
+  const session = new EpisodeSession(pack, {
+    locale: "en",
+    tier: "S",
+    onEvent: (event) => events.push({ at: now, event }),
+  });
+  session.start(0);
+  now = SCENE_START_MS;
+  session.tick(now);
+
+  for (const scene of challengeScenes) {
+    assert.equal(session.getSnapshot(now).scene.id, scene.id);
+    const frames = synthesizePoseFrames(scriptForChallenge(scene.challenge));
+    const sceneStartedAt = now;
+    for (const frame of frames) {
+      now = sceneStartedAt + frame.timestampMs;
+      session.tick(now);
+      session.updatePose({ ...frame, sequence: frame.sequence + sequenceOffset, timestampMs: now });
+    }
+    sequenceOffset += frames.length;
+    assert.equal(session.getSnapshot(now).status, "celebrating", `${scene.id} should resolve before the next beat`);
+    now += 1_600;
+    session.tick(now);
+  }
+  assert.equal(session.getSnapshot(now).scene.id, "complete");
+  now += 1_600;
+  session.tick(now);
 
   const visited = events
     .filter(({ event }) => event.type === "scene-changed")
     .map(({ event }) => event.sceneId);
-  assert.deepEqual(visited, [packJson.entrySceneId, first.id, "complete"]);
-  const at = successAt(events);
-  assert.notEqual(at, null);
-  assert.equal(at - SCENE_START_MS <= first.challenge.timeBudgetMs, true);
+  assert.deepEqual(visited, [packJson.entrySceneId, ...challengeScenes.map((scene) => scene.id), "complete"]);
+  assert.equal(events.filter(({ event }) => event.type === "audio-cue" && event.purpose === "success").length, 3);
+  assert.equal(progressEvents(events).length, 5);
   assert.equal(events.at(-1)?.event.type, "complete");
   console.log(
-    `    [motion] full pack: success in scene '${first.id}' at ${at - SCENE_START_MS}ms, `
-    + `session complete; scenes visited: ${visited.join(" -> ")}`,
+    `    [motion] full pack: five jumps across three escalating beats; scenes visited: ${visited.join(" -> ")}`,
   );
 });

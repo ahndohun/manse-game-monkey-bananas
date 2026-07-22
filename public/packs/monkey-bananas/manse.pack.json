@@ -119,10 +119,10 @@
       "demo": null,
       "challenge": {
         "type": "jump",
-        "repetitions": 5,
-        "minRiseRatio": 0.12,
-        "landingStableMs": 300,
-        "cooldownMs": 800,
+        "repetitions": 2,
+        "minRiseRatio": 0.1,
+        "landingStableMs": 340,
+        "cooldownMs": 900,
         "timeBudgetMs": 112000,
         "successAudioId": "success-tone",
         "encourageAudioId": "encourage-tone"
@@ -137,7 +137,7 @@
       "transitions": [
         {
           "on": "success",
-          "to": "complete",
+          "to": "round-two",
           "adapt": null
         },
         {
@@ -175,7 +175,7 @@
       "demo": null,
       "challenge": {
         "type": "jump",
-        "repetitions": 5,
+        "repetitions": 2,
         "minRiseRatio": 0.12,
         "landingStableMs": 300,
         "cooldownMs": 800,
@@ -188,6 +188,55 @@
         "payload": []
       },
       "artAssetId": null,
+      "energy": "medium",
+      "terminal": false,
+      "transitions": [
+        {
+          "on": "success",
+          "to": "round-three",
+          "adapt": null
+        },
+        {
+          "on": "struggle",
+          "to": "round-three",
+          "adapt": null
+        }
+      ]
+    },
+    {
+      "id": "round-three",
+      "kind": "challenge",
+      "narration": {
+        "items": [
+          {
+            "locale": "ko",
+            "text": "마지막 황금 바나나예요! 준비되면 편안하게 한 번 더 뛰어 보세요.",
+            "audioAssetId": "beat-tone-ko"
+          },
+          {
+            "locale": "en",
+            "text": "One golden banana left! When you are ready, make one last comfortable jump.",
+            "audioAssetId": "beat-tone-en"
+          }
+        ],
+        "captionDefaultOn": true
+      },
+      "demo": null,
+      "challenge": {
+        "type": "jump",
+        "repetitions": 1,
+        "minRiseRatio": 0.14,
+        "landingStableMs": 280,
+        "cooldownMs": 720,
+        "timeBudgetMs": 112000,
+        "successAudioId": "success-tone",
+        "encourageAudioId": "encourage-tone"
+      },
+      "learning": {
+        "kind": "none",
+        "payload": []
+      },
+      "artAssetId": "jungle-jump-hero",
       "energy": "medium",
       "terminal": false,
       "transitions": [
@@ -304,6 +353,42 @@
           "kind": "original",
           "creator": "Manse",
           "createdAt": "2026-07-21T14:34:13.253Z"
+        }
+      },
+      {
+        "id": "beat-tone-en",
+        "path": "assets/audio/beat-en.wav",
+        "mediaType": "audio/wav",
+        "locale": "en",
+        "transcript": "",
+        "license": {
+          "spdxId": "MIT",
+          "name": "MIT License",
+          "url": "https://spdx.org/licenses/MIT.html",
+          "attribution": "Manse — Monkey Bananas"
+        },
+        "provenance": {
+          "kind": "original",
+          "creator": "Manse",
+          "createdAt": "2026-07-22T00:00:00.000Z"
+        }
+      },
+      {
+        "id": "beat-tone-ko",
+        "path": "assets/audio/beat-ko.wav",
+        "mediaType": "audio/wav",
+        "locale": "ko",
+        "transcript": "",
+        "license": {
+          "spdxId": "MIT",
+          "name": "MIT License",
+          "url": "https://spdx.org/licenses/MIT.html",
+          "attribution": "Manse — Monkey Bananas"
+        },
+        "provenance": {
+          "kind": "original",
+          "creator": "Manse",
+          "createdAt": "2026-07-22T00:00:00.000Z"
         }
       }
     ],

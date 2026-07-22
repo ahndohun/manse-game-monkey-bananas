@@ -40,6 +40,22 @@
       "sha256": "9d9fc8fa481dfb8bbefc91c38f393f2d24cc02e35bd4bea1068d4a70be429624"
     },
     {
+      "path": "/packs/monkey-bananas/assets/audio/beat-en.wav",
+      "origin": "original-procedural",
+      "creator": "Manse",
+      "createdAt": "2026-07-22T00:00:00.000Z",
+      "license": "MIT",
+      "sha256": "e7276abca3136b91a631659bf6205249305552668e58e2fd42dd01045f4e28df"
+    },
+    {
+      "path": "/packs/monkey-bananas/assets/audio/beat-ko.wav",
+      "origin": "original-procedural",
+      "creator": "Manse",
+      "createdAt": "2026-07-22T00:00:00.000Z",
+      "license": "MIT",
+      "sha256": "e7276abca3136b91a631659bf6205249305552668e58e2fd42dd01045f4e28df"
+    },
+    {
       "path": "/models/pose_landmarker_lite.task",
       "origin": "third-party",
       "source": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",

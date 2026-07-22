@@ -3,14 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createMansePlayer, type MansePlayer, type PlayerSnapshot, type ProviderKind } from "@manse/runtime-web";
 import { GAME_CONFIG, type GameLocale, UI_COPY } from "./game-config";
-import { createMonkeyBananasRenderer } from "./themed-renderer";
+import { createMonkeyJumpProvider } from "./jump-provider";
+import { createMonkeyBananasRendererFactory } from "./themed-renderer";
 
 const PACK_URL = `/packs/${GAME_CONFIG.slug}/manse.pack.json`;
-const EMPTY: Pick<PlayerSnapshot, "phase" | "provider" | "tier" | "renderer" | "cameraActive" | "targetProgress" | "caption"> = {
+const EMPTY: Pick<PlayerSnapshot, "phase" | "provider" | "cameraActive" | "targetProgress" | "caption"> = {
   phase: "idle",
   provider: "simulated",
-  tier: "A",
-  renderer: null,
   cameraActive: false,
   targetProgress: null,
   caption: null,
@@ -46,7 +45,8 @@ export function GameClient() {
       container,
       locale,
       provider,
-      rendererFactory: createMonkeyBananasRenderer,
+      providerFactory: createMonkeyJumpProvider,
+      rendererFactory: createMonkeyBananasRendererFactory(locale),
       captions: true,
       reducedStimulation: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
       onEvent: (event) => {
@@ -155,7 +155,7 @@ export function GameClient() {
       <section className="player-shell" aria-label={copy.playerLabel}>
         <div className="player-bar">
           <span><i className={error === null ? "status-dot" : "status-dot status-error"} aria-hidden="true" /> {status}</span>
-          <span>{snapshot.renderer ?? copy.runtimeReady} · {copy.tier} {snapshot.tier}</span>
+          <span>{copy.missionSpec}</span>
         </div>
         <div
           className="stage"
