@@ -8,6 +8,8 @@ export const GAME_CONFIG = {
   heroUrl: "/packs/monkey-bananas/assets/images/jungle-jump-hero.png",
 } as const;
 
+export const SHOWCASE_URL = "https://manse-showcase.ran584000.chatgpt.site";
+
 export const UI_COPY = {
   ko: {
     pageTitle: "원숭이 바나나",
@@ -37,6 +39,7 @@ export const UI_COPY = {
     startError: "게임을 시작하지 못했어요. 다시 시도하거나 포인터 모드를 선택해 주세요.",
     footer: "Manse가 만들고 오픈 Manse 엔진으로 실행합니다. 움직임이 불편하면 언제든 멈추세요.",
     source: "소스 보기",
+    browseGames: "게임 둘러보기",
   },
   en: {
     pageTitle: "Monkey Bananas",
@@ -66,5 +69,6 @@ export const UI_COPY = {
     startError: "The game could not start. Please try again or choose pointer mode.",
     footer: "Created by Manse and powered by the open Manse engine. Stop whenever movement feels uncomfortable.",
     source: "View source",
+    browseGames: "Browse games",
   },
 } as const satisfies Record<GameLocale, Record<string, string>>;

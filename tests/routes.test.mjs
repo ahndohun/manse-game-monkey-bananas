@@ -33,6 +33,26 @@ test("keeps start controls clickable while localizing the runtime", async () => 
   assert.match(clientSource, /selectLocale\("en"\)/);
 });
 
+test("connects the compact platform shell to the exact public Showcase", async () => {
+  const response = await render();
+  const html = await response.text();
+  const showcaseUrl = "https://manse-showcase.ran584000.chatgpt.site";
+  assert.equal(html.match(new RegExp(`href="${showcaseUrl}"`, "g"))?.length, 2);
+  assert.match(html, />MANSE</);
+  assert.match(html, />Browse games</);
+
+  const config = await readFile("app/game-config.ts", "utf8");
+  assert.match(config, /browseGames: "게임 둘러보기"/);
+  assert.match(config, /browseGames: "Browse games"/);
+
+  const css = await readFile("app/globals.css", "utf8");
+  assert.match(css, /\.platform-shell\s*\{[\s\S]*?height:\s*68px/);
+  assert.match(css, /@media \(max-width: 760px\)[\s\S]*?\.platform-shell\s*\{\s*height:\s*64px/);
+  assert.match(css, /\.platform-shell-inner\s*\{[\s\S]*?min-width:\s*0/);
+  assert.match(css, /\.platform-browse\s*\{[\s\S]*?white-space:\s*nowrap/);
+  assert.match(css, /\.platform-shell-inner\s*\{[^}]*overflow:\s*hidden/);
+});
+
 test("ships a locale-aware full-strength game renderer", async () => {
   const source = await readFile("app/themed-renderer.ts", "utf8");
   assert.doesNotMatch(source, /createDefaultRenderer/);

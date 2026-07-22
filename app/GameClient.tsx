@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createMansePlayer, type MansePlayer, type PlayerSnapshot, type ProviderKind } from "@manse/runtime-web";
-import { GAME_CONFIG, type GameLocale, UI_COPY } from "./game-config";
+import { GAME_CONFIG, SHOWCASE_URL, type GameLocale, UI_COPY } from "./game-config";
 import { createMonkeyJumpProvider } from "./jump-provider";
 import { createMonkeyBananasRendererFactory } from "./themed-renderer";
 
@@ -130,7 +130,14 @@ export function GameClient() {
             : copy.statusSimulator;
 
   return (
-    <main>
+    <>
+      <nav className="platform-shell" aria-label="Manse">
+        <div className="platform-shell-inner">
+          <a className="platform-wordmark" href={SHOWCASE_URL} aria-label="Manse Showcase">MANSE</a>
+          <a className="platform-browse" href={SHOWCASE_URL}>{copy.browseGames}</a>
+        </div>
+      </nav>
+      <main>
       <header className="game-hero">
         <img className="hero-art" src={GAME_CONFIG.heroUrl} alt={copy.heroAlt} width="1672" height="941" />
         <div className="hero-shade" aria-hidden="true" />
@@ -196,6 +203,7 @@ export function GameClient() {
         <p>{copy.footer}</p>
         <a href={GAME_CONFIG.sourceUrl}>{copy.source} <span aria-hidden="true">↗</span></a>
       </footer>
-    </main>
+      </main>
+    </>
   );
 }

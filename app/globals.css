@@ -9,6 +9,10 @@
   --bark: #c56a2a;
   --bark-bright: #ee8840;
   --muted: #cbd8ca;
+  --platform-black: #0d100d;
+  --platform-white: #f6f7ef;
+  --platform-lime: #c8ff3d;
+  --platform-radius: 999px;
 }
 
 * { box-sizing: border-box; }
@@ -40,6 +44,57 @@ button:disabled { cursor: wait; opacity: .62; }
 button.secondary { border: 1px solid rgba(255, 244, 207, .48); background: rgba(6, 28, 22, .38); color: var(--ink); }
 button.secondary:hover { background: rgba(255, 244, 207, .12); }
 a { color: var(--banana); text-underline-offset: 4px; }
+
+.platform-shell {
+  position: relative;
+  z-index: 20;
+  height: 68px;
+  border-bottom: 1px solid rgba(246, 247, 239, .14);
+  background: rgba(13, 16, 13, .96);
+  color: var(--platform-white);
+}
+.platform-shell-inner {
+  width: min(1180px, calc(100% - 40px));
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-width: 0;
+  margin: 0 auto;
+}
+.platform-wordmark {
+  min-width: 0;
+  color: var(--platform-white);
+  font: 850 20px/1 ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -.045em;
+  text-decoration: none;
+}
+.platform-browse {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 0 16px;
+  border: 1px solid var(--platform-lime);
+  border-radius: var(--platform-radius);
+  color: var(--platform-black);
+  background: var(--platform-lime);
+  font-size: 13px;
+  font-weight: 780;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 150ms ease, background-color 150ms ease, color 150ms ease;
+}
+.platform-browse:hover { background: var(--platform-white); color: var(--platform-black); }
+.platform-wordmark:hover { color: var(--platform-lime); }
+.platform-wordmark:active { color: var(--platform-lime); transform: translateY(1px); }
+.platform-browse:active { transform: translateY(1px) scale(.98); }
+.platform-wordmark:focus-visible, .platform-browse:focus-visible {
+  outline: 3px solid var(--platform-lime);
+  outline-offset: 3px;
+}
 
 main { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
 .game-hero {
@@ -114,6 +169,10 @@ footer a { flex: 0 0 auto; font-weight: 750; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 @media (max-width: 760px) {
+  .platform-shell { height: 64px; }
+  .platform-shell-inner { width: calc(100% - 24px); gap: 12px; overflow: hidden; }
+  .platform-wordmark { font-size: 18px; }
+  .platform-browse { min-height: 36px; padding-inline: 13px; font-size: 12px; }
   main { width: min(100% - 20px, 1120px); }
   .game-hero { min-height: 620px; margin-top: 10px; border-radius: 24px; }
   .hero-art { object-position: 61% center; }
