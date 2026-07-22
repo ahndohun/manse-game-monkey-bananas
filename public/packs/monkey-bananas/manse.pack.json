@@ -60,7 +60,7 @@
           "text": "Banana Buddy"
         }
       ],
-      "artAssetId": null,
+      "artAssetId": "jungle-jump-hero",
       "description": "A friendly guide who encourages comfortable, unhurried jumps."
     }
   ],
@@ -131,7 +131,7 @@
         "kind": "none",
         "payload": []
       },
-      "artAssetId": null,
+      "artAssetId": "jungle-jump-hero",
       "energy": "medium",
       "terminal": false,
       "transitions": [
